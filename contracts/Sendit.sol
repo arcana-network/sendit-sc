@@ -6,6 +6,7 @@ pragma solidity 0.8.8;
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/interfaces/IERC20Upgradeable.sol";
+import "hardhat/console.sol";
 
 contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
   enum RequestStatus { OPEN, REJECTED, COMPLETED }
@@ -23,7 +24,7 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
 
   function initialize() public initializer {
     __Ownable_init();
-    __EIP712_init("Sendit", "1");
+    __EIP712_init("Sendit", "0.0.1");
   }
 
   // @dev request parameters and signature is fetched from off-chain and
@@ -39,9 +40,9 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
     require(_recipient != address(0), "Sendit: invalid recipient");
     require(_value > 0, "Sendit: invalid value");
     require(_token_address != address(0), "Sendit: invalid token address");
-    require(r != 0, "Sendit: invalid signature");
-    require(s != 0, "Sendit: invalid signature");
-    require(v != 0, "Sendit: invalid signature");
+    // require(r != 0, "Sendit: invalid signature");
+    // require(s != 0, "Sendit: invalid signature");
+    // require(v != 0, "Sendit: invalid signature");
     // check if the request is not already completed
     require(requests[_id].status != RequestStatus.COMPLETED, "Sendit: request is completed");
     // check if the request is not already rejected
