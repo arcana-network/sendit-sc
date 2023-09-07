@@ -11,6 +11,47 @@ describe("Sendit", function () {
   let sendit: Sendit;
   let token: Token;
   let signers: SignerWithAddress[];
+
+  const sendToken = async (
+    requestRaw: {
+      nonce: number;
+      recipient: SignerWithAddress;
+      value: number;
+      token_address: string;
+    },
+    signer: SignerWithAddress
+  ) => {
+    const request = {
+      nonce: requestRaw.nonce,
+      recipient: requestRaw.recipient.address,
+      value: requestRaw.value,
+      token_address: requestRaw.token_address,
+    };
+
+    await token.connect(signer).approve(sendit.address, request.value);
+
+    const signature = await signMetaTxRequest(
+      requestRaw.recipient,
+      sendit,
+      request
+    );
+    // break this signature into v, r, s
+    const { v, r, s } = ethers.utils.splitSignature(signature);
+    // call send function
+    const sendTx = await sendit
+      .connect(signer)
+      .send(
+        request.nonce,
+        request.recipient,
+        request.value,
+        request.token_address,
+        v,
+        r,
+        s
+      );
+    await sendTx.wait();
+  };
+
   beforeEach(async function () {
     signers = await ethers.getSigners();
     const senditFactory = (await ethers.getContractFactory(
@@ -44,61 +85,28 @@ describe("Sendit", function () {
   it("Should send 10 tokens from owner to receiver", async function () {
     // receiver should generate EIP 712 domaing signature for requesting 10 tokens
     const request = {
-      nonce: 1,
-      recipient: signers[0].address,
+      nonce: 0,
+      recipient: signers[0],
       value: 10,
       token_address: token.address,
     };
-
-    await token.connect(signers[1]).approve(sendit.address, 10);
-
-    const signature = await signMetaTxRequest(signers[0], sendit, request);
-    // break this signature into v, r, s
-    const { v, r, s } = ethers.utils.splitSignature(signature);
-    // call send function
-    const sendTx = await sendit
-      .connect(signers[1])
-      .send(
-        request.nonce,
-        request.recipient,
-        request.value,
-        request.token_address,
-        v,
-        r,
-        s
-      );
-    await sendTx.wait();
+    await sendToken(request, signers[1]);
     // check if receiver has 10 tokens
-    expect(await token.balanceOf(request.recipient)).to.equal(request.value);
+    expect(await token.balanceOf(request.recipient.address)).to.equal(
+      request.value
+    );
   });
 
   it("Should not send 10 tokens from owner to receiver if nonce is wrong", async function () {
-    // receiver should generate EIP 712 domaing signature for requesting 10 tokens
     const request = {
-      nonce: 1,
-      recipient: signers[0].address,
+      nonce: 0,
+      recipient: signers[0],
       value: 10,
       token_address: token.address,
     };
-
-    await token.connect(signers[1]).approve(sendit.address, 10);
-
-    const signature = await signMetaTxRequest(signers[0], sendit, request);
-    // break this signature into v, r, s
-    const { v, r, s } = ethers.utils.splitSignature(signature);
-    // call send function
-    await expect(
-      sendit
-        .connect(signers[1])
-        .send(
-          request.nonce,
-          request.recipient,
-          request.value,
-          request.token_address,
-          v,
-          r,
-          s
-        )
-    ).to.be.revertedWith("Nonce mismatch");
-  }
+    await sendToken(request, signers[1]);
+    await expect(sendToken(request, signers[1])).to.be.revertedWith(
+      "Sendit: Nonce already used"
+    );
+  });
 });
