@@ -37,7 +37,11 @@ describe("Sendit", function () {
     );
     // break this signature into v, r, s
     const { v, r, s } = ethers.utils.splitSignature(signature);
+    let value = request.value;
     // call send function
+    if (request.token_address !== ethers.constants.AddressZero) {
+      value = 0;
+    }
     const sendTx = await sendit
       .connect(signer)
       .send(
@@ -48,7 +52,7 @@ describe("Sendit", function () {
         v,
         r,
         s
-      );
+      , { value });
     await sendTx.wait();
   };
 
@@ -108,5 +112,17 @@ describe("Sendit", function () {
     await expect(sendToken(request, signers[1])).to.be.revertedWith(
       "Sendit: Nonce already used"
     );
+  });
+
+  it("Should send native token from sender to receiver", async function () {
+    const request = {
+      nonce: 0,
+      recipient: signers[0],
+      value: 10,
+      token_address: ethers.constants.AddressZero,
+    };
+    const recipientBalanceBefore = await request.recipient.getBalance();
+    await sendToken(request, signers[1]);
+    expect((await request.recipient.getBalance()).sub(recipientBalanceBefore)).to.equal(10);
   });
 });
