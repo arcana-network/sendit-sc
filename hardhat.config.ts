@@ -13,8 +13,12 @@ const config: HardhatUserConfig = {
 		deployer: 0,
 	},
   networks: {
+    hardhat: {
+      saveDeployments: true,
+    },
     bnb: {
       //fetch url from .env file
+      saveDeployments: true,
       url: process.env.BNB_RPC_URL as string,
       accounts: [process.env.PRIVATE_KEY as string],
     },

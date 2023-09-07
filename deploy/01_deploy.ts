@@ -9,6 +9,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   let snt = await deploy('Sendit', {
     contract: 'Sendit',
+    deterministicDeployment: true,
     from: deployer,
     proxy: {
       owner: deployer,
@@ -23,10 +24,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
 
   console.log('==sendit addr=', snt.address)
-  console.log('==sendit impl=', snt.implementation)
 
  const tkn = await deploy('Token', {
     contract: 'Token',
+    deterministicDeployment: true,
     from: deployer,
     proxy: {
       owner: deployer,
