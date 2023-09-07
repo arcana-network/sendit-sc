@@ -10,7 +10,7 @@ const EIP712Domain = [
 ];
 
 const Request = [
-  { name: "id", type: "uint256" },
+  { name: "nonce", type: "uint256" },
   { name: "recipient", type: "address" },
   { name: "value", type: "uint256" },
   { name: "token_address", type: "address" },
