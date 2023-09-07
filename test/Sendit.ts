@@ -44,7 +44,7 @@ describe("Sendit", function () {
   it("Should send 10 tokens from owner to receiver", async function () {
     // receiver should generate EIP 712 domaing signature for requesting 10 tokens
     const request = {
-      id: 1,
+      nonce: 1,
       recipient: signers[0].address,
       value: 10,
       token_address: token.address,
@@ -59,7 +59,7 @@ describe("Sendit", function () {
     const sendTx = await sendit
       .connect(signers[1])
       .send(
-        request.id,
+        request.nonce,
         request.recipient,
         request.value,
         request.token_address,
