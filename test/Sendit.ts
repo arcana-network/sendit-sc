@@ -71,4 +71,34 @@ describe("Sendit", function () {
     // check if receiver has 10 tokens
     expect(await token.balanceOf(request.recipient)).to.equal(request.value);
   });
+
+  it("Should not send 10 tokens from owner to receiver if nonce is wrong", async function () {
+    // receiver should generate EIP 712 domaing signature for requesting 10 tokens
+    const request = {
+      nonce: 1,
+      recipient: signers[0].address,
+      value: 10,
+      token_address: token.address,
+    };
+
+    await token.connect(signers[1]).approve(sendit.address, 10);
+
+    const signature = await signMetaTxRequest(signers[0], sendit, request);
+    // break this signature into v, r, s
+    const { v, r, s } = ethers.utils.splitSignature(signature);
+    // call send function
+    await expect(
+      sendit
+        .connect(signers[1])
+        .send(
+          request.nonce,
+          request.recipient,
+          request.value,
+          request.token_address,
+          v,
+          r,
+          s
+        )
+    ).to.be.revertedWith("Nonce mismatch");
+  }
 });

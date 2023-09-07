@@ -41,9 +41,6 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
     require(_recipient != address(0), "Sendit: invalid recipient");
     require(_value > 0, "Sendit: invalid value");
     require(_token_address != address(0), "Sendit: invalid token address");
-    // require(r != 0, "Sendit: invalid signature");
-    // require(s != 0, "Sendit: invalid signature");
-    // require(v != 0, "Sendit: invalid signature");
     // check if the request is not already completed
     require(requests[_nonce].status != RequestStatus.COMPLETED, "Sendit: request is completed");
     // check if the request is not already rejected
