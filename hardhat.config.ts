@@ -13,7 +13,19 @@ const config: HardhatUserConfig = {
 		deployer: 0,
 	},
   networks: {
-    hardhat: {
+    ganache: {
+      url: "http://localhost:8545",
+      accounts: ["9e5135396a754a2d0e64b00ffdba8b374c3918186d3f6016facc9d4d1ebbaab1"],
+      saveDeployments: true,
+    },
+    mumbai: {
+      url: "https://rpc-mumbai.maticvigil.com",
+      accounts: [process.env.PRIVATE_KEY as string],
+      saveDeployments: true,
+    },
+    puppy: {
+      url: "https://puppynet.shibrpc.com",
+      accounts: [process.env.PRIVATE_KEY as string],
       saveDeployments: true,
     },
     bnb: {
