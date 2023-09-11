@@ -9,11 +9,17 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts();
 
-  await new Create2Factory(ethers.provider).deployFactory()
+  // await new Create2Factory(ethers.provider).deployFactory()
 
   let snt = await deploy('Sendit', {
     contract: 'Sendit',
-    deterministicDeployment: true,
+    // deterministicDeployment: true,
+    deterministicDeployment: {
+      factory: "0x4e59b44847b379578588920ca78fbf26c0b4956c",
+      deployer: "0x3fab184622dc19b6109349b94811493bf2a45362",
+      funding: "0",
+      signedTx: "0xf8a58085174876e800830186a08080b853604580600e600039806000f350fe7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf31ba02222222222222222222222222222222222222222222222222222222222222222a02222222222222222222222222222222222222222222222222222222222222222",
+    },
     from: deployer,
     proxy: {
       owner: deployer,

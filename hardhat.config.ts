@@ -15,7 +15,7 @@ const config: HardhatUserConfig = {
   networks: {
     ganache: {
       url: "http://localhost:8545",
-      accounts: ["9e5135396a754a2d0e64b00ffdba8b374c3918186d3f6016facc9d4d1ebbaab1"],
+      accounts: ["23a48125f38ee2028641a47bd695a43d41cecada7e6d39c9af5174cab3e3a464"],
       saveDeployments: true,
     },
     mumbai: {
@@ -34,6 +34,14 @@ const config: HardhatUserConfig = {
       url: process.env.BNB_RPC_URL as string,
       accounts: [process.env.PRIVATE_KEY as string],
     },
+    shardeum: {
+      url: "https://dapps.shardeum.org",
+      accounts: [process.env.SEP_PRIV_KEY as string]
+    },
+    skale: {
+      url: "https://staging-v3.skalenodes.com/v1/staging-fast-active-bellatrix",
+      accounts: [process.env.SEP_PRIV_KEY as string]
+    }
   },
 };
 
