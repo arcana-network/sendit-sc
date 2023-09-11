@@ -54,6 +54,7 @@ describe("Sendit", function () {
         s
       , { value });
     await sendTx.wait();
+    return sendTx;
   };
 
   beforeEach(async function () {
@@ -100,6 +101,19 @@ describe("Sendit", function () {
       request.value
     );
   });
+
+  it("Should emit an Request completed event", async function () {
+    const request = {
+      nonce: 0,
+      recipient: signers[0],
+      value: 10,
+      token_address: token.address,
+    };
+    await expect(sendToken(request, signers[1]))
+      .to.emit(sendit, "RequestCompleted")
+      .withArgs(request.nonce, request.recipient.address, request.value, request.token_address);
+  });
+
 
   it("Should not send 10 tokens from owner to receiver if nonce is wrong", async function () {
     const request = {

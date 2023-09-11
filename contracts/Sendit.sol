@@ -18,7 +18,8 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
       RequestStatus status;
   }
   mapping(address => mapping(uint256 => bool)) public nonces;
-  mapping(uint256 => Request) public requests;
+  mapping(address => mapping(uint256 => Request)) public requests;
+  event RequestCompleted(uint256 nonce, address recipient, uint256 value, address token_address);
 
   bytes32 private constant REQUEST_TYPEHASH = 
   keccak256("Request(uint256 nonce,address recipient,uint256 value,address token_address)");
@@ -41,11 +42,11 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
     require(_recipient != address(0), "Sendit: invalid recipient");
     require(_value > 0, "Sendit: invalid value");
     // check if the request is not already completed
-    require(requests[_nonce].status != RequestStatus.COMPLETED, "Sendit: request is completed");
+    require(requests[_recipient][_nonce].status != RequestStatus.COMPLETED, "Sendit: request is completed");
     // check if the request is not already rejected
-    require(requests[_nonce].status != RequestStatus.REJECTED, "Sendit: request is rejected");
+    require(requests[_recipient][_nonce].status != RequestStatus.REJECTED, "Sendit: request is rejected");
     // request should be open 
-    require(requests[_nonce].status == RequestStatus.OPEN, "Sendit: request is not open");
+    require(requests[_recipient][_nonce].status == RequestStatus.OPEN, "Sendit: request is not open");
     // check if the signature is valid
     bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(REQUEST_TYPEHASH, _nonce,_recipient, _value, _token_address)));
     address signer = ecrecover(digest, v, r, s);
@@ -64,8 +65,9 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
       require(sent, "Sendit: failed to send tokens");
     }
     // update the request status
-    requests[_nonce] = Request(_nonce, _recipient, _value, _token_address, RequestStatus.COMPLETED);
+    requests[_recipient][_nonce] = Request(_nonce, _recipient, _value, _token_address, RequestStatus.COMPLETED);
     nonces[_recipient][_nonce] = true;
+    emit RequestCompleted(_nonce, _recipient, _value, _token_address);
   }
 
 }
