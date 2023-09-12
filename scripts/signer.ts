@@ -1,6 +1,5 @@
 const ethSigUtil = require("eth-sig-util");
 import { Sendit } from "../typechain-types/contracts";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 const EIP712Domain = [
   { name: "name", type: "string" },
@@ -14,6 +13,7 @@ const Request = [
   { name: "recipient", type: "address" },
   { name: "value", type: "uint256" },
   { name: "token_address", type: "address" },
+  { name: "expiry", type: "uint256" },
 ];
 
 function getMetaTxTypeData(chainId: number, verifyingContract: string) {

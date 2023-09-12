@@ -18,6 +18,7 @@ describe("Sendit", function () {
       recipient: SignerWithAddress;
       value: number;
       token_address: string;
+      expiry: number;
     },
     signer: SignerWithAddress
   ) => {
@@ -26,6 +27,7 @@ describe("Sendit", function () {
       recipient: requestRaw.recipient.address,
       value: requestRaw.value,
       token_address: requestRaw.token_address,
+      expiry: requestRaw.expiry,
     };
 
     await token.connect(signer).approve(sendit.address, request.value);
@@ -49,10 +51,12 @@ describe("Sendit", function () {
         request.recipient,
         request.value,
         request.token_address,
+        request.expiry,
         v,
         r,
-        s
-      , { value });
+        s,
+        { value }
+      );
     await sendTx.wait();
     return sendTx;
   };
@@ -94,6 +98,7 @@ describe("Sendit", function () {
       recipient: signers[0],
       value: 10,
       token_address: token.address,
+      expiry: new Date().getTime() + 1000 * 60 * 60 * 24 * 30, // 30 days
     };
     await sendToken(request, signers[1]);
     // check if receiver has 10 tokens
@@ -108,12 +113,17 @@ describe("Sendit", function () {
       recipient: signers[0],
       value: 10,
       token_address: token.address,
+      expiry: new Date().getTime() + 1000 * 60 * 60 * 24 * 30, // 30 days
     };
     await expect(sendToken(request, signers[1]))
       .to.emit(sendit, "RequestCompleted")
-      .withArgs(request.nonce, request.recipient.address, request.value, request.token_address);
+      .withArgs(
+        request.nonce,
+        request.recipient.address,
+        request.value,
+        request.token_address
+      );
   });
-
 
   it("Should not send 10 tokens from owner to receiver if nonce is wrong", async function () {
     const request = {
@@ -121,6 +131,7 @@ describe("Sendit", function () {
       recipient: signers[0],
       value: 10,
       token_address: token.address,
+      expiry: new Date().getTime() + 1000 * 60 * 60 * 24 * 30, // 30 days
     };
     await sendToken(request, signers[1]);
     await expect(sendToken(request, signers[1])).to.be.revertedWith(
@@ -134,9 +145,12 @@ describe("Sendit", function () {
       recipient: signers[0],
       value: 10,
       token_address: ethers.constants.AddressZero,
+      expiry: new Date().getTime() + 1000 * 60 * 60 * 24 * 30, // 30 days
     };
     const recipientBalanceBefore = await request.recipient.getBalance();
     await sendToken(request, signers[1]);
-    expect((await request.recipient.getBalance()).sub(recipientBalanceBefore)).to.equal(10);
+    expect(
+      (await request.recipient.getBalance()).sub(recipientBalanceBefore)
+    ).to.equal(10);
   });
 });
