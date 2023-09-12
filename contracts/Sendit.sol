@@ -36,6 +36,7 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
   // @param _value the amount of the payment
   // @param _token_address the address of the token to be used for the payment
   // @param _signature the signature of the request parameters
+  // @param _expiry the expiry of the request
   function send(uint256 _nonce,address _recipient, uint256 _value, address _token_address, uint256 _expiry,
   uint8 v, bytes32 r, bytes32 s) public payable {
     // check if the request is valid
