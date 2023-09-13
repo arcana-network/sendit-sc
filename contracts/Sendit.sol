@@ -6,9 +6,9 @@ pragma solidity 0.8.8;
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/interfaces/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 
-contract Sendit is OwnableUpgradeable, EIP712Upgradeable,ReentrancyGuard  {
+contract Sendit is EIP712Upgradeable, ReentrancyGuardUpgradeable  {
   enum RequestStatus { OPEN, REJECTED, COMPLETED }
   struct Request {
       uint256 nonce;
@@ -26,7 +26,7 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable,ReentrancyGuard  {
   keccak256("Request(uint256 nonce,address recipient,uint256 value,address token_address,uint256 expiry)");
 
   function initialize() public initializer {
-    __Ownable_init();
+    ReentrancyGuardUpgradeable.__ReentrancyGuard_init();
     __EIP712_init("Sendit", "0.0.1");
   }
 
