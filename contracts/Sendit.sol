@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/interfaces/IERC20Upgradeable.sol";
 import "hardhat/console.sol";
 
-contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
+contract Sendit is EIP712Upgradeable {
   enum RequestStatus { OPEN, REJECTED, COMPLETED }
   struct Request {
       uint256 nonce;
@@ -26,7 +26,7 @@ contract Sendit is OwnableUpgradeable, EIP712Upgradeable {
   keccak256("Request(uint256 nonce,address recipient,uint256 value,address token_address,uint256 expiry)");
 
   function initialize() public initializer {
-    __Ownable_init();
+    // __Ownable_init();
     __EIP712_init("Sendit", "0.0.1");
   }
 

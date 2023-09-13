@@ -83,7 +83,7 @@ describe("Sendit", function () {
     );
   });
 
-  it("Should set proper owner", async function () {
+  it.skip("Should set proper owner", async function () {
     expect(await sendit.owner()).to.equal(signers[0].address);
   });
 
@@ -153,4 +153,26 @@ describe("Sendit", function () {
       (await request.recipient.getBalance()).sub(recipientBalanceBefore)
     ).to.equal(10);
   });
+
+  it("Should be able to upgrade" , async () => {
+
+    const sntV2 = await ethers.getContractFactory("SenditV2");
+    const snt2 =  await upgrades.upgradeProxy( sendit.address, sntV2 )
+
+    expect( await snt2.version()).to.eq(2);
+    expect( snt2.address ).to.eq(sendit.address);
+
+  })
+
+  it("Should change the admin" , async () => {
+    //change owner to user1
+    await upgrades.admin.transferProxyAdminOwnership(signers[1].address)
+
+    const sntV2 = await ethers.getContractFactory("SenditV2");
+    
+    await expect(upgrades.upgradeProxy( sendit.address, sntV2 )).to.be.revertedWith("Ownable: caller is not the owner")
+
+
+  })
+
 });
