@@ -6,9 +6,9 @@ pragma solidity 0.8.8;
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/interfaces/IERC20Upgradeable.sol";
-import "hardhat/console.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 
-contract Sendit is EIP712Upgradeable {
+contract Sendit is EIP712Upgradeable,ReentrancyGuardUpgradeable  {
   enum RequestStatus { OPEN, REJECTED, COMPLETED }
   struct Request {
       uint256 nonce;
@@ -26,7 +26,7 @@ contract Sendit is EIP712Upgradeable {
   keccak256("Request(uint256 nonce,address recipient,uint256 value,address token_address,uint256 expiry)");
 
   function initialize() public initializer {
-    // __Ownable_init();
+    __ReentrancyGuard_init();
     __EIP712_init("Sendit", "0.0.1");
   }
 
@@ -38,7 +38,7 @@ contract Sendit is EIP712Upgradeable {
   // @param _signature the signature of the request parameters
   // @param _expiry the expiry of the request
   function send(uint256 _nonce,address _recipient, uint256 _value, address _token_address, uint256 _expiry,
-  uint8 v, bytes32 r, bytes32 s) public payable {
+  uint8 v, bytes32 r, bytes32 s) nonReentrant external payable {
     // check if the request is valid
     require(nonces[_recipient][_nonce] == false, "Sendit: Nonce already used");
     require(_recipient != address(0), "Sendit: invalid recipient");
@@ -55,6 +55,10 @@ contract Sendit is EIP712Upgradeable {
     bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(REQUEST_TYPEHASH, _nonce,_recipient, _value, _token_address, _expiry)));
     address signer = ecrecover(digest, v, r, s);
     require(signer == _recipient, "Sendit: invalid signature");
+     // update the request status
+    requests[_recipient][_nonce] = Request(_nonce, _recipient, _value, _token_address, _expiry,RequestStatus.COMPLETED);
+    nonces[_recipient][_nonce] = true;
+
     // transfer the payment
     if (_token_address == address(0)) {
       // transfer ether
@@ -68,9 +72,7 @@ contract Sendit is EIP712Upgradeable {
       bool sent = token.transferFrom(msg.sender, _recipient, _value);
       require(sent, "Sendit: failed to send tokens");
     }
-    // update the request status
-    requests[_recipient][_nonce] = Request(_nonce, _recipient, _value, _token_address, _expiry,RequestStatus.COMPLETED);
-    nonces[_recipient][_nonce] = true;
+   
     emit RequestCompleted(_nonce, _recipient, _value, _token_address);
   }
 
