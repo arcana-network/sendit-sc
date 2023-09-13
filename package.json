@@ -23,6 +23,7 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@openzeppelin/contracts": "^4.9.3",
     "@openzeppelin/hardhat-upgrades": "1.13",
     "ethers": "^5.7",
     "hardhat-deploy": "^0.11.37",
