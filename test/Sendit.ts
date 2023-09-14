@@ -154,25 +154,35 @@ describe("Sendit", function () {
     ).to.equal(10);
   });
 
-  it("Should be able to upgrade" , async () => {
+  it("Upgrade via plugin", async () => {
 
     const sntV2 = await ethers.getContractFactory("SenditV2");
-    const snt2 =  await upgrades.upgradeProxy( sendit.address, sntV2 )
+    const snt2 = await upgrades.upgradeProxy(sendit.address, sntV2)
 
-    expect( await snt2.version()).to.eq(2);
-    expect( snt2.address ).to.eq(sendit.address);
+    expect(await snt2.version()).to.eq(2);
+    expect(snt2.address).to.eq(sendit.address);
 
   })
 
-  it("Should change the admin" , async () => {
+  it("Should change the admin", async () => {
     //change owner to user1
     await upgrades.admin.transferProxyAdminOwnership(signers[1].address)
+  })
 
+  it("Upgrade via proxy admin contract ", async () => {
     const sntV2 = await ethers.getContractFactory("SenditV2");
-    
-    await expect(upgrades.upgradeProxy( sendit.address, sntV2 )).to.be.revertedWith("Ownable: caller is not the owner")
 
+    const newImpl = await upgrades.prepareUpgrade(sendit.address, sntV2, {
+      kind: "transparent"
+    })
 
+    //method is useful when admin is not available in contract
+    const proxyAdmin = await upgrades.admin.getInstance()
+
+    await proxyAdmin.connect(signers[1]).upgrade(sendit.address, newImpl);
+    const snt2 = sntV2.attach(sendit.address);
+
+    expect(await snt2.version()).to.eq(2);
   })
 
 });
