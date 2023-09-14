@@ -1,8 +1,6 @@
-# Sample Hardhat Project
+# Sendit Smart Conract
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
-
-Try running some of the following tasks:
+Used for paymet request feature on Sendit.
 
 ```shell
 npx hardhat help
