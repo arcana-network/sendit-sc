@@ -1,8 +1,7 @@
-import { ethers, upgrades } from "hardhat";
-import { abi } from "../deployments/ganache/DefaultProxyAdmin.json"
+import { ethers } from "hardhat";
 
 async function main(): Promise<void> {
-    const proxyContractAddress = "0x1F73976FA75B971Ef547E5FE94676285bC698a2f" ;
+    const proxyContractAddress = "<proxy-contract>" ;
     const newOwner = "<new-owner-address>"; 
     //fetch admin contract address from proxy
     const provider = ethers.provider;
@@ -13,10 +12,12 @@ async function main(): Promise<void> {
 	);
     const proxyAdminAddress = "0x" + res.substring(26);
   
-  
-    const proxyAdmin = new ethers.Contract(proxyAdminAddress, abi ,provider )
-
-    //await proxyAdmin.transferOwnership(newOwner);
+    const proxyAdminABI = [
+        "function owner() view returns(address)",
+        "function transferOwnership(address newOwner) public"
+    ]
+    const proxyAdmin = new ethers.Contract(proxyAdminAddress, proxyAdminABI ,provider )
+    await proxyAdmin.transferOwnership(newOwner);
 
     console.log(`
     Proxy Admin: ${proxyAdminAddress} 
