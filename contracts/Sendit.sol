@@ -75,5 +75,4 @@ contract Sendit is EIP712Upgradeable,ReentrancyGuardUpgradeable  {
    
     emit RequestCompleted(_nonce, _recipient, _value, _token_address);
   }
-
 }

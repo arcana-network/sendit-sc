@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@nomicfoundation/hardhat-verify": "^1.1.1",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@openzeppelin/hardhat-upgrades": "1.13",
     "ethers": "^5.7",
