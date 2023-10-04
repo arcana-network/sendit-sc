@@ -9,7 +9,7 @@ import "@nomicfoundation/hardhat-toolbox";
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.8",
+  solidity: "0.8.20",
   namedAccounts: {
     deployer: 0,
   },

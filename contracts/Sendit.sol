@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.8;
+pragma solidity 0.8.20;
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/interfaces/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+// import "hardhat/console.sol";
 
 contract Sendit is EIP712Upgradeable,ReentrancyGuardUpgradeable  {
   enum RequestStatus { OPEN, REJECTED, COMPLETED }
@@ -51,7 +52,7 @@ contract Sendit is EIP712Upgradeable,ReentrancyGuardUpgradeable  {
     require(requests[_recipient][_nonce].status == RequestStatus.OPEN, "Sendit: request is not open");
     // check if the signature is valid
     bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(REQUEST_TYPEHASH, block.chainid,_nonce,_recipient, _value, _token_address, _expiry)));
-    address signer = ecrecover(digest, v, r, s);
+    address signer = ECDSA.recover(digest, v, r, s);
     require(signer == _recipient, "Sendit: invalid signature");
      // update the request status
     requests[_recipient][_nonce] = Request(_nonce, _recipient, _value, _token_address, _expiry,RequestStatus.COMPLETED);
