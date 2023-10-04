@@ -9,6 +9,7 @@ const EIP712Domain = [
 ];
 
 const Request = [
+  { name: "chainId", type: "uint256" },
   { name: "nonce", type: "uint256" },
   { name: "recipient", type: "address" },
   { name: "value", type: "uint256" },

@@ -4,6 +4,7 @@ import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/interfaces/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "hardhat/console.sol";
 
 contract Sendit is EIP712Upgradeable,ReentrancyGuardUpgradeable  {
   enum RequestStatus { OPEN, REJECTED, COMPLETED }
@@ -20,7 +21,7 @@ contract Sendit is EIP712Upgradeable,ReentrancyGuardUpgradeable  {
   event RequestCompleted(uint256 nonce, address recipient, uint256 value, address token_address);
 
   bytes32 private constant REQUEST_TYPEHASH = 
-  keccak256("Request(uint256 nonce,address recipient,uint256 value,address token_address,uint256 expiry)");
+  keccak256("Request(uint256 chainId,uint256 nonce,address recipient,uint256 value,address token_address,uint256 expiry)");
 
   function initialize() public initializer {
     __ReentrancyGuard_init();
@@ -49,7 +50,7 @@ contract Sendit is EIP712Upgradeable,ReentrancyGuardUpgradeable  {
     // request should be open 
     require(requests[_recipient][_nonce].status == RequestStatus.OPEN, "Sendit: request is not open");
     // check if the signature is valid
-    bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(REQUEST_TYPEHASH, _nonce,_recipient, _value, _token_address, _expiry)));
+    bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(REQUEST_TYPEHASH, block.chainid,_nonce,_recipient, _value, _token_address, _expiry)));
     address signer = ecrecover(digest, v, r, s);
     require(signer == _recipient, "Sendit: invalid signature");
      // update the request status

@@ -23,13 +23,13 @@ describe("Sendit", function () {
     signer: SignerWithAddress
   ) => {
     const request = {
+      chainId: (await signer.provider?.getNetwork())?.chainId || 1,
       nonce: requestRaw.nonce,
       recipient: requestRaw.recipient.address,
       value: requestRaw.value,
       token_address: requestRaw.token_address,
       expiry: requestRaw.expiry,
     };
-
     await token.connect(signer).approve(sendit.address, request.value);
 
     const signature = await signMetaTxRequest(
