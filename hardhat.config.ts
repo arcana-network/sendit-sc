@@ -9,7 +9,30 @@ import "@nomicfoundation/hardhat-toolbox";
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.20",
+  solidity: {
+    compilers: [
+      {
+        version: `0.8.20`,
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 15000,
+          },
+          evmVersion: `paris`,
+        },
+      },
+      {
+        version: `0.8.10`,
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 999999,
+          },
+          evmVersion: `london`,
+        },
+      },
+    ],
+  },
   namedAccounts: {
     deployer: 0,
   },
@@ -51,11 +74,35 @@ const config: HardhatUserConfig = {
       url: "https://staging-v3.skalenodes.com/v1/staging-fast-active-bellatrix",
       accounts: [process.env.PRIVATE_KEY as string],
     },
+    opBnbTestnet: {
+      url: "https://opbnb-testnet.nodereal.io/v1/64a9df0874fb4a93b9d0a3849de012d3",
+      accounts: [process.env.PRIVATE_KEY as string],
+      gasPrice: 2000000000,
+    },
+    opBnb: {
+      url: "https://opbnb-mainnet.nodereal.io/v1/64a9df0874fb4a93b9d0a3849de012d3",
+      accounts: [process.env.PRIVATE_KEY as string],
+      gasPrice: 2000000000,
+    },
   },
   etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    apiKey: process.env.ETHERSCAN_API_KEY as string,
+    // apiKey: process.env.ETHERSCAN_API_KEY as string,
+    apiKey: {
+      opBnb: process.env.NODREAL_API_KEY as string, //replace your nodereal API key
+    },
+
+    customChains: [
+      {
+        network: "opBnb",
+        chainId: 204, // Replace with the correct chainId for the "opbnb" network
+        urls: {
+          apiURL: `https://open-platform.nodereal.io/${process.env.NODREAL_API_KEY}/op-bnb-testnet/contract/`,
+          browserURL: "https://opbnbscan.com/",
+        },
+      },
+    ],
   },
 };
 
