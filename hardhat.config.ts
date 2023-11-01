@@ -98,7 +98,7 @@ const config: HardhatUserConfig = {
         network: "opBnb",
         chainId: 204, // Replace with the correct chainId for the "opbnb" network
         urls: {
-          apiURL: `https://open-platform.nodereal.io/${process.env.NODREAL_API_KEY}/op-bnb-testnet/contract/`,
+          apiURL: `https://open-platform.nodereal.io/${process.env.NODREAL_API_KEY}/op-bnb-mainnet/contract/`,
           browserURL: "https://opbnbscan.com/",
         },
       },
