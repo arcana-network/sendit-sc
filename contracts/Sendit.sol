@@ -26,6 +26,7 @@ contract Sendit is EIP712Upgradeable, ReentrancyGuardUpgradeable {
   mapping(address => mapping(uint256 => Request)) public requests;
   event RequestCompleted(
     uint256 nonce,
+    address fulfiller,
     address recipient,
     uint256 value,
     address token_address
@@ -123,6 +124,6 @@ contract Sendit is EIP712Upgradeable, ReentrancyGuardUpgradeable {
       token.safeTransferFrom(msg.sender, _recipient, _value);
     }
 
-    emit RequestCompleted(_nonce, _recipient, _value, _token_address);
+    emit RequestCompleted(_nonce, msg.sender, _recipient, _value, _token_address);
   }
 }
