@@ -5,7 +5,7 @@ import "./SenditV1.sol";
 
 contract SenditV2 is SenditV1 {
   using SafeERC20 for IERC20;
-  event RequestFulfilled (
+  event RequestFulfilled(
     uint256 nonce,
     address indexed fulfiller,
     address indexed recipient,
@@ -102,5 +102,12 @@ contract SenditV2 is SenditV1 {
       _value,
       _token_address
     );
+  }
+
+  /**
+   * @dev returns the version of the contract
+   */
+  function version() external virtual pure returns (uint) {
+    return 2;
   }
 }
