@@ -7,6 +7,8 @@ import { Token } from "../typechain-types/contracts/Token";
 import { Token__factory } from "../typechain-types/factories/contracts/Token__factory";
 import { signMetaTxRequest } from "../scripts/signer";
 
+const version = 2;
+
 describe("Sendit", function () {
   let sendit: Sendit;
   let token: Token;
@@ -64,7 +66,7 @@ describe("Sendit", function () {
   beforeEach(async function () {
     signers = await ethers.getSigners();
     const senditFactory = (await ethers.getContractFactory(
-      "Sendit",
+      `SenditV${version}`,
       signers[0]
     )) as Sendit__factory;
     sendit = (await upgrades.deployProxy(senditFactory, [])) as Sendit;
@@ -81,10 +83,6 @@ describe("Sendit", function () {
     await expect(sendit.initialize()).to.be.revertedWith(
       "Initializable: contract is already initialized"
     );
-  });
-
-  it.skip("Should set proper owner", async function () {
-    expect(await sendit.owner()).to.equal(signers[0].address);
   });
 
   it("Token should have 10**9 tokens", async function () {
@@ -119,6 +117,7 @@ describe("Sendit", function () {
       .to.emit(sendit, "RequestCompleted")
       .withArgs(
         request.nonce,
+        signers[1].address,
         request.recipient.address,
         request.value,
         request.token_address
@@ -155,7 +154,7 @@ describe("Sendit", function () {
   });
 
   it("Upgrade via plugin", async () => {
-    const sntV2 = await ethers.getContractFactory("SenditV2");
+    const sntV2 = await ethers.getContractFactory("SenditTestV2");
     const snt2 = await upgrades.upgradeProxy(sendit.address, sntV2);
 
     expect(await snt2.version()).to.eq(2);
@@ -168,7 +167,7 @@ describe("Sendit", function () {
   });
 
   it("Upgrade via proxy admin contract ", async () => {
-    const sntV2 = await ethers.getContractFactory("SenditV2");
+    const sntV2 = await ethers.getContractFactory("SenditTestV2");
 
     const newImpl = await upgrades.prepareUpgrade(sendit.address, sntV2, {
       kind: "transparent",

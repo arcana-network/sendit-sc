@@ -35,23 +35,23 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   console.log('==sendit addr=', snt.address)
 
- const tkn = await deploy('Token', {
-    contract: 'Token',
-    deterministicDeployment: true,
-    from: deployer,
-    proxy: {
-      owner: deployer,
-      proxyContract: 'OpenZeppelinTransparentProxy',
-      execute: {
-        init: {
-          methodName: 'initialize',
-        }
-      }
-    },
-    log: false,
-  });
+//  const tkn = await deploy('Token', {
+//     contract: 'Token',
+//     deterministicDeployment: true,
+//     from: deployer,
+//     proxy: {
+//       owner: deployer,
+//       proxyContract: 'OpenZeppelinTransparentProxy',
+//       execute: {
+//         init: {
+//           methodName: 'initialize',
+//         }
+//       }
+//     },
+//     log: false,
+//   });
 
-  console.log('==token addr=', tkn.address)
+//   console.log('==token addr=', tkn.address)
 
 };
 export default func;

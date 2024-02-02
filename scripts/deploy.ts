@@ -14,10 +14,11 @@ async function main(): Promise<void> {
   console.log("Total signers", signers.length);
 
   const senditFactory = (await ethers.getContractFactory(
-    "Sendit",
+    "SenditV2",
     signers[0]
   )) as Sendit__factory;
   const sendit = await upgrades.deployProxy(senditFactory, []);
+  await sendit.deployed();
   console.log("Sendit deployed to:", sendit.address);
   
   // Peer into OpenZeppelin manifest to extract the implementation address
