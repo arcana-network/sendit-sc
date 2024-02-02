@@ -5,7 +5,7 @@ import "./SenditV1.sol";
 
 contract SenditV2 is SenditV1 {
   using SafeERC20 for IERC20;
-  event RequestCompleted (
+  event RequestFulfilled (
     uint256 nonce,
     address indexed fulfiller,
     address indexed recipient,
@@ -95,7 +95,7 @@ contract SenditV2 is SenditV1 {
       token.safeTransferFrom(msg.sender, _recipient, _value);
     }
 
-    emit RequestCompleted(
+    emit RequestFulfilled(
       _nonce,
       msg.sender,
       _recipient,

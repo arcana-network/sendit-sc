@@ -114,7 +114,7 @@ describe("Sendit", function () {
       expiry: new Date().getTime() + 1000 * 60 * 60 * 24 * 30, // 30 days
     };
     await expect(sendToken(request, signers[1]))
-      .to.emit(sendit, "RequestCompleted")
+      .to.emit(sendit, "RequestFulfilled")
       .withArgs(
         request.nonce,
         signers[1].address,
