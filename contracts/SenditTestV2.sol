@@ -6,7 +6,7 @@ pragma solidity 0.8.20;
 import "./SenditV2.sol";
 
 contract SenditTestV2 is SenditV2 {
-  function version() external pure returns (uint) {
+  function version() external override pure returns (uint) {
     return 2;
   }
 }
