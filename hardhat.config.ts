@@ -21,16 +21,6 @@ const config: HardhatUserConfig = {
           evmVersion: `paris`,
         },
       },
-      {
-        version: `0.8.10`,
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 999999,
-          },
-          evmVersion: `london`,
-        },
-      },
     ],
   },
   namedAccounts: {
@@ -48,6 +38,12 @@ const config: HardhatUserConfig = {
       url: "https://rpc.ankr.com/polygon_mumbai",
       accounts: [process.env.PRIVATE_KEY as string],
       saveDeployments: true,
+    },
+    polygon: {
+      url: "https://polygon-rpc.com",
+      accounts: [process.env.PRIVATE_KEY as string],
+      saveDeployments: true,
+      chainId: 137,
     },
     puppy: {
       url: "https://puppynet.shibrpc.com",
@@ -84,14 +80,23 @@ const config: HardhatUserConfig = {
       accounts: [process.env.PRIVATE_KEY as string],
       gasPrice: 2000000000,
     },
+    arbitrum: {
+      url: "https://arb1.arbitrum.io/rpc",
+      accounts: [process.env.PRIVATE_KEY as string],
+    },
+    ethereum: {
+      url: "https://ethereum.publicnode.com",
+      accounts: [process.env.PRIVATE_KEY as string],
+    },
   },
   etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    // apiKey: process.env.ETHERSCAN_API_KEY as string,
-    apiKey: {
-      opBnb: process.env.NODREAL_API_KEY as string, //replace your nodereal API key
-    },
+    apiKey: process.env.ETHERSCAN_API_KEY as string,
+    // apiKey: {
+    //   opBnb: process.env.NODREAL_API_KEY as string, //replace your nodereal API key
+
+    // },
 
     customChains: [
       {

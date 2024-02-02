@@ -1,8 +1,8 @@
 {
   "manifestVersion": "3.2",
   "admin": {
-    "address": "0xC7fc7547BEf2D10DFa525B0A136572FA8F30e248",
-    "txHash": "0x712bf8b92bb0ad1cf9a83c431922b4635b402cccd1c54dcf44da048b7bb41742"
+    "address": "0x5e563D066162cB99A5c3237521aF82993EAd7FA6",
+    "txHash": "0x610a2c5e2083d0c1f28ffdaea596982ea8eea0d1de0289ddcd177b2969e99fad"
   },
   "proxies": [
     {
@@ -12,6 +12,21 @@
     },
     {
       "address": "0x35F7479402B2FE28CD90B9C07bc2ae9dF8662eE6",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x3b4d28f62Cc0491e6a3a2313987eB243e545a301",
+      "txHash": "0xd8933dfbef33ffa29ec964676b8f202db526cd1af2efacff19d716637b1ca0e0",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5027Fc44a7Ba114B8f494B1e4970900C6652FEDF",
+      "txHash": "0xca17334b93e154f7b2824d26bca6da78c2f24b6cdd3893d1aa5f5add31e272c7",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x3551f1F9FdF54Fc88eBEd0EbC2EE3a24D2485984",
+      "txHash": "0x635014dc8d0e19a9500f089d85b20cbde6ea5089a8a41b654053af7da7a15971",
       "kind": "transparent"
     }
   ],
@@ -340,6 +355,206 @@
               {
                 "label": "status",
                 "type": "t_enum(RequestStatus)2726",
+                "offset": 0,
+                "slot": "5"
+              }
+            ],
+            "numberOfBytes": "192"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    },
+    "56e2eaa717c665fa234bfaf7fc6d8f972e50a6dfcdd5f07e6bb401bddbb955b7": {
+      "address": "0x8afB9D249bCc1E153109F36D2A1DC4570431F065",
+      "txHash": "0x2304460f62bbe07729cfc45038b224221ba2e4ac3a3d3ef223a083bbbf424cba",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:63",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:68"
+          },
+          {
+            "label": "_hashedName",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_bytes32",
+            "contract": "EIP712Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol:40",
+            "renamedFrom": "_HASHED_NAME"
+          },
+          {
+            "label": "_hashedVersion",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "EIP712Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol:42",
+            "renamedFrom": "_HASHED_VERSION"
+          },
+          {
+            "label": "_name",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_string_storage",
+            "contract": "EIP712Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol:44"
+          },
+          {
+            "label": "_version",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_string_storage",
+            "contract": "EIP712Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol:45"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_array(t_uint256)48_storage",
+            "contract": "EIP712Upgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol:204"
+          },
+          {
+            "label": "_status",
+            "offset": 0,
+            "slot": "53",
+            "type": "t_uint256",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:38"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "54",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:88"
+          },
+          {
+            "label": "nonces",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_bool))",
+            "contract": "Sendit",
+            "src": "contracts/Sendit.sol:25"
+          },
+          {
+            "label": "requests",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Request)4879_storage))",
+            "contract": "Sendit",
+            "src": "contracts/Sendit.sol:26"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)48_storage": {
+            "label": "uint256[48]",
+            "numberOfBytes": "1536"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_enum(RequestStatus)4865": {
+            "label": "enum Sendit.RequestStatus",
+            "members": [
+              "OPEN",
+              "REJECTED",
+              "COMPLETED"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_bool))": {
+            "label": "mapping(address => mapping(uint256 => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Request)4879_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct Sendit.Request))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(Request)4879_storage)": {
+            "label": "mapping(uint256 => struct Sendit.Request)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Request)4879_storage": {
+            "label": "struct Sendit.Request",
+            "members": [
+              {
+                "label": "nonce",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "recipient",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "value",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "token_address",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "expiry",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(RequestStatus)4865",
                 "offset": 0,
                 "slot": "5"
               }
