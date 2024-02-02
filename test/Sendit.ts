@@ -119,6 +119,7 @@ describe("Sendit", function () {
       .to.emit(sendit, "RequestCompleted")
       .withArgs(
         request.nonce,
+        signers[1].address,
         request.recipient.address,
         request.value,
         request.token_address
